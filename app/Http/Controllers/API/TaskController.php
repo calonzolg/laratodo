@@ -35,7 +35,7 @@ class TaskController extends Controller
             [
                 'title' => 'required|string|max:50',
                 'description' => 'required|string|max:1000',
-                'recaptcha' => ['required', $recaptcha],
+                'recaptcha' => ['sometimes', 'required', $recaptcha],
             ]
         );
 
@@ -46,7 +46,7 @@ class TaskController extends Controller
             ]
         );
 
-        return response()->json(compact('task'), Response::HTTP_OK);
+        return response()->json(compact('task'), Response::HTTP_CREATED);
     }
 
     /**
