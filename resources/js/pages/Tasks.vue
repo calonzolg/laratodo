@@ -2,41 +2,29 @@
   <div class="container mx-auto">
     <h1 class="text-4xl my-3">To Do List</h1>
     <section>
-      <ul>
-        <li v-for="task in tasks">
-          <div class="flex flex-row justify-between">
-            <div :class="task.completed_at ? `line-through` : ``">
-              <span>{{ task.title }}</span>
-              <p class="truncate max-w-2xl">
-                <small class="text-gray-400">
-                  {{ task.description }}
-                </small>
-              </p>
-            </div>
-            <div class="flex flex-row space-x-2">
-              <button
-                class="flex items-center text-sm font-medium text-green-500 hover:text-green-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                complete
-              </button>
-              <button
-                class="flex items-center text-sm font-medium text-blue-500 hover:text-blue-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                edit
-              </button>
-              <button
-                class="flex items-center text-sm font-medium text-red-500 hover:text-red-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                delete
-              </button>
-            </div>
-          </div>
+      <ul v-if="tasks.length !== 0">
+        <li v-for="task in tasks" class="rounded bg-white p-2">
+          <task-item
+            :task="task"
+            @deletedTask="handleDeletedItem"
+          />
         </li>
       </ul>
+      <p v-else>
+        The list is empty
+      </p>
     </section>
   </div>
 </template>
 
 <script>
+import TaskItem from "../components/TaskItem";
+
 export default {
   name: "Tasks",
+  components: {
+    'task-item': TaskItem,
+  },
   data() {
     return {
       tasks: []
@@ -44,6 +32,11 @@ export default {
   },
   mounted() {
     axios('api/tasks').then(response => this.tasks = response.data.tasks)
+  },
+  methods: {
+    handleDeletedItem(id) {
+      this.tasks = this.tasks.filter(task => task.id !== id)
+    }
   }
 }
 </script>

@@ -53,11 +53,13 @@ class TaskController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function show($id)
     {
-        //
+        $task = Task::query()->find($id);
+
+        return response()->json(compact('task'), Response::HTTP_OK);
     }
 
     /**
@@ -65,21 +67,42 @@ class TaskController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $task = Task::query()->find($id);
+
+        if ($request->method() === 'PUT') {
+            $task->update(
+                [
+                    'title' => $request->input('title'),
+                    'description' => $request->input('description'),
+                ]
+            );
+        } elseif ($request->method() === 'PATCH') {
+            $task->update(
+                [
+                    'completed_at' => now(),
+                ]
+            );
+        }
+
+        return response()->json(compact('task'), Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function destroy($id)
     {
-        //
+        $task = Task::query()->find($id);
+        $taskId = $task->id;
+        $task->delete();
+
+        return response()->json(compact('taskId'), Response::HTTP_OK);
     }
 }
