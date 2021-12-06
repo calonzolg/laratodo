@@ -9,10 +9,15 @@
     <title>Lara To Do</title>
 
     <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet" />
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 
 <body>
 <div id="app"></div>
+
+<script>
+    window.recaptchaSite = '{{ config('services.recaptcha.key') }}'
+</script>
 <script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
 </body>
 
