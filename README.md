@@ -14,6 +14,8 @@
  - cp .env.example .env
  - php artisan sail:install
  - ./vendor/bin/sail up -d
+ - sail yarn
+ - sail yarn dev
 
 ### Running test
 
